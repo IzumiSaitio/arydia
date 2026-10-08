@@ -1,0 +1,67 @@
+/* 3.8 visual polish: depth, rhythm, brass-and-forest identity. Overrides only; layout and logic untouched. */
+:root{--r:16px;--brass:#c3a15a;--brass-d:#8f6f2f;--forest-l:#2a5a52;--lift:0 1px 0 #fffdf5 inset,0 1px 2px #2b2a1a14,0 10px 24px -12px #2b3a2a33}
+body{background:radial-gradient(120% 60% at 50% -10%,#fbf6e6 0%,transparent 60%),radial-gradient(90% 50% at 100% 100%,#dfe4d1 0%,transparent 60%),#ece7d6}
+body .masthead{background:linear-gradient(180deg,#163b36,#0f2a26);border-bottom:0;box-shadow:0 1px 0 #c3a15a80,0 8px 20px -10px #0f2a26aa;position:sticky;top:0;z-index:40}
+body .masthead .brand-name{background:linear-gradient(180deg,#f6e4ae,#cda85d);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none;letter-spacing:5px}
+body .masthead .brand-sub{opacity:1;color:#aebfae}
+body .masthead .top-action{border:0;border-radius:50%;background:#ffffff12;box-shadow:0 0 0 1px #c3a15a66 inset;color:#ecdcaa}
+#main{padding-top:26px}
+h1{letter-spacing:.5px}
+.page-title h1{color:#173d39;font-weight:800}
+.page-title:after{content:'';position:absolute}
+/* surfaces */
+.panel,.result,.track,.skill,.stat,.feature,.music-detail{border:0;border-radius:var(--r);background:linear-gradient(180deg,#fffdf6,#f8f3e4);box-shadow:var(--lift)}
+.result{padding:14px 14px;transition:transform .15s,box-shadow .15s}.result:active{transform:scale(.985)}
+.result-icon{background:linear-gradient(145deg,#e7ecd8,#d5dfc6);border-radius:12px;color:var(--forest)}
+.result h3{color:#1f3b34}
+/* buttons */
+.btn{border-radius:12px;border:0;background:linear-gradient(180deg,#fffdf6,#f4eedd);box-shadow:var(--lift);color:#2c4a40}
+.btn.primary{background:linear-gradient(180deg,#2b5c53,#173d39);color:#fbf0cf;box-shadow:0 1px 0 #ffffff30 inset,0 -2px 0 #0b2420 inset,0 8px 18px -8px #173d39cc;letter-spacing:1px;font-weight:600}
+.btn.gold{background:linear-gradient(180deg,#ecd196,#cfa95c);color:#3a2f16;box-shadow:0 1px 0 #fff7 inset,0 6px 14px -8px #8f6f2f}
+/* nav: floating bar */
+#nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));width:auto;max-width:560px;margin:0 auto;border:0;border-radius:22px;padding:6px;background:#fbf7ebe6;backdrop-filter:blur(18px) saturate(1.2);box-shadow:0 0 0 1px #c3a15a40,0 14px 34px -10px #0f2a2655}
+#nav button{border-radius:16px;min-height:52px;transition:background .2s,color .2s}
+#nav button.active{background:linear-gradient(180deg,#2a5a52,#173d39);color:#f8edc9;box-shadow:0 1px 0 #ffffff30 inset,0 6px 14px -6px #173d39aa}
+#nav button.active:after,#nav button.active .nav-icon:before{display:none}
+.has-music #main{padding-bottom:170px}#main{padding-bottom:110px}
+/* welcome */
+.welcome{min-height:calc(100dvh - 230px);display:flex;flex-direction:column;justify-content:center;gap:0}
+.welcome-art{filter:drop-shadow(0 18px 22px #2b3a2a40)}
+.welcome h1{font-size:30px;color:#173d39;margin-top:34px;text-align:center}
+.welcome h1:after{content:'';display:block;width:64px;height:2px;margin:16px auto 0;background:linear-gradient(90deg,transparent,var(--brass),transparent)}
+.welcome .btn.primary{margin-top:26px;min-height:52px;font-size:15px}
+/* search */
+.searchbox{border:0;border-radius:16px;background:#fffdf7;box-shadow:0 0 0 1px #c9bf9f,0 10px 24px -14px #2b3a2a55;padding:3px 14px}
+.searchbox:focus-within{box-shadow:0 0 0 2px var(--forest-l),0 12px 26px -12px #2b3a2a66}
+.chip{border:0;background:#fffdf6;box-shadow:0 0 0 1px #d6cbac;border-radius:999px;color:#4d5d50}
+.chip.active{background:linear-gradient(180deg,#2a5a52,#173d39);color:#f8edc9;box-shadow:0 6px 12px -6px #173d39aa}
+.empty,.notice{border-radius:var(--r)}
+.notice{border-left:0;background:#e7e2cf;box-shadow:0 0 0 1px #d6cbac inset}
+/* music */
+.music-intro{border-radius:20px;background:radial-gradient(120% 140% at 85% 0%,#2f6a5f 0%,transparent 55%),linear-gradient(135deg,#173d39,#0f2a26);box-shadow:0 0 0 1px #c3a15a66 inset,0 18px 34px -16px #0f2a26aa}
+.music-badge{width:46px;height:46px;border-radius:14px;object-fit:contain;background:#fffdf6;padding:5px;box-shadow:0 0 0 1px #e1d7b8,0 4px 10px -4px #2b2a1a33}
+.track{padding:6px 14px 6px 12px;gap:14px;transition:transform .15s,box-shadow .2s}
+.track-indicator{width:40px;height:40px;border:0;background:linear-gradient(180deg,#fffdf6,#efe8d3);box-shadow:0 0 0 1px #d3c7a5,0 4px 8px -4px #2b2a1a44;color:var(--forest)}
+.track.playing .track-indicator,.track.selected-track .track-indicator{background:linear-gradient(180deg,#2a5a52,#173d39);color:#f8edc9}
+.track.selected-track{box-shadow:0 0 0 2px #7f9a6a,var(--lift)}
+/* character */
+.character-hero{border:0;border-radius:20px;box-shadow:0 0 0 1px #c3a15a66 inset,0 18px 34px -16px #0f2a26aa}
+.record-tabs button[aria-pressed=true]:after{background:var(--brass);height:3px;border-radius:3px}
+/* modal & forms */
+.modal-overlay{background:#0f2a26d9;backdrop-filter:blur(6px)}
+.modal{border-radius:24px 24px 0 0;background:#f4efe0;box-shadow:0 -20px 60px #0006}
+.modal-head:before{content:'';position:absolute;top:7px;left:50%;width:38px;height:4px;margin-left:-19px;border-radius:4px;background:#cfc5a6}
+.modal-head{border-bottom:1px solid #e0d6b9}
+.choice{border:0;border-radius:14px;background:#fffdf6;box-shadow:var(--lift)}
+.choice.selected{background:#eaf0df;box-shadow:0 0 0 2px var(--forest-l),var(--lift);padding:7px}
+input,select,textarea{border:0;border-radius:12px;background:#fffdf7;box-shadow:0 0 0 1px #cfc6b1}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 2px var(--forest-l)}
+#toast{border:0;border-radius:14px;background:#0f2a26f2;box-shadow:0 0 0 1px #c3a15a66,0 14px 30px -10px #0008;bottom:100px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* 3.8 fixes */
+#nav button{flex:1;width:auto}
+.theme-badge{width:46px;height:46px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:14px;color:#f6e4ae;background:linear-gradient(145deg,#2a5a52,#173d39);box-shadow:0 0 0 1px #c3a15a99,0 4px 10px -4px #0f2a2688}
+.theme-badge svg{width:24px;height:24px}
+.track:last-child,.track.selected-track:last-child{border:0}
+.searchbox input,.searchbox input:focus{box-shadow:none;background:transparent;border-radius:0}
+.chips{padding-bottom:16px}

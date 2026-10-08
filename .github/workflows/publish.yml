@@ -1,0 +1,64 @@
+name: Publish web and Android
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: arydia-publish
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate web and APK
+        run: |
+          unzip -q web/assets.zip -d web/dist
+          cat release/Arydia-3.8.0.apk.part1 release/Arydia-3.8.0.apk.part2 > release/Arydia-3.8.0.apk
+          node web/scripts/prepare-web.cjs
+          node web/scripts/check.cjs
+          python3 - <<'PY'
+          import json, hashlib
+          from pathlib import Path
+          m=json.loads(Path('release/manifest.json').read_text())
+          p=Path('release')/m['file']
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==m['sha256']
+          u=json.loads(Path('web/dist/update.json').read_text())
+          assert u['sha256']==m['sha256'] and u['releaseUrl'].endswith('/'+m['tag'])
+          PY
+      - name: Publish signed APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=$(node -p "require('./release/manifest.json').tag")
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            mkdir -p /tmp/arydia-published
+            gh release download "$TAG" --pattern Arydia-3.8.0.apk --dir /tmp/arydia-published
+            cmp release/Arydia-3.8.0.apk /tmp/arydia-published/Arydia-3.8.0.apk
+          else
+            gh release create "$TAG" release/Arydia-3.8.0.apk --target "$GITHUB_SHA" --title '阿瑞迪亚 · 旅伴 3.8.0' --notes-file release/notes.md --latest
+          fi
+  pages:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -q web/assets.zip -d web/dist
+      - run: node web/scripts/prepare-web.cjs
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+      - uses: actions/deploy-pages@v4
+        id: deploy
