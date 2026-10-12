@@ -22,7 +22,7 @@
   let storage;
   try { storage = window.localStorage; } catch (_) { storage = null; }
   const gate = createGate(window.Android || null, storage);
-  window.Intro = {show};
+  window.Intro = {show,accepted:()=>gate.accepted()};
   function show() {
   if (document.querySelector('.intro-overlay')) return;
   const returnFocus = document.activeElement;
@@ -30,7 +30,7 @@
   root.className = 'intro-overlay';
   root.innerHTML = `<section class="intro-dialog" role="dialog" aria-modal="true" aria-label="公会领袖撒迪斯" aria-describedby="intro-story" tabindex="-1">
     <div class="intro-card">
-      <img class="intro-art" src="intro/thades-front.png" width="1635" height="2275" alt="" draggable="false">
+      <img class="intro-art" src="intro/${UI.get().language==='en'?'thades-front-en.png':'thades-front.png'}" width="1635" height="2275" alt="" draggable="false">
       <div id="intro-story" class="intro-story sr-only">
         <h1>公会领袖撒迪斯</h1><p>人类 · 男性。神态：焦躁。举动：踱步、拨弄胡须。特征：急促、带着催促。</p>
         <p>撒迪斯已经在这里等了很久。他来回踱步，拨弄着胡须。终于看见你们出现，猛地停下，朝你们连招了几下手。</p>
@@ -42,6 +42,11 @@
     </div>
     <p class="intro-error" role="alert" hidden></p>
   </section>`;
+  if(UI.get().language==='en'){
+    root.querySelector('.intro-dialog').setAttribute('aria-label','Guildmaster Thades');
+    root.querySelector('#intro-story').innerHTML='<h1>Guildmaster Thades</h1><p>Thades has been waiting, pacing and fiddling with his beard. As you arrive, he beckons impatiently.</p><p>“Exiles! At last! Come here, I have something for you. I paid someone called IzumiSaito to make this. They say it can track your growth, look up clues, and organize your belongings. I thought it might make your adventures a little easier. Go on, try it!”</p><p>Any other topic: “Why are you still standing there? Pick it up and have a look!”</p>';
+    for(const [selector,label] of [['.intro-enter','Take the strange device'],['.intro-leave','Turn and leave']]){const b=root.querySelector(selector);b.setAttribute('aria-label',label);b.querySelector('span').textContent=label;}
+  }
   const background = [...document.body.children].filter(el => el.tagName !== 'SCRIPT');
   const previousInert = background.map(el => el.inert);
   background.forEach(el => { el.inert = true; });
@@ -61,7 +66,7 @@
       window.Music?.command('stop');
       root.classList.add('intro-browser-left');
       error.hidden = false;
-      error.textContent = '已离开。请关闭当前页面，或返回手机主屏幕。接过卡牌可继续使用。';
+      error.textContent = UI.get().language==='en'?'You may close this page or return to your home screen. Take the card to continue.':'已离开。请关闭当前页面，或返回手机主屏幕。接过卡牌可继续使用。';
     }
   }
   window.appBack = function () { if (open) { exit(); return true; } return previousBack ? previousBack() : false; };
@@ -115,5 +120,5 @@
   else if (art.complete) { if (art.naturalWidth) ready(); else imageFailed(); }
   else art.addEventListener('load', ready, {once:true});
   }
-  if (!gate.accepted()) show();
+  window.AppUI.startWelcome();
 })();

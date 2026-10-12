@@ -1,15 +1,9 @@
-# 阿瑞迪亚 · 旅伴 / Arydia Companion
+# 阿瑞迪亚 · 旅伴 3.8.0 网页版
 
-非官方玩家辅助工具，配合 Arydia 实体游戏使用。
+浏览器发布文件。完整开发工程不在本仓库；本次发布不包含 APK。
 
-- 网页版入口（部署完成后）：https://izumisaitio.github.io/arydia/
-- 安卓安装包：[Releases](https://github.com/IzumiSaitio/arydia/releases)
-- 中文交流群：328669965
+角色、技能、笔记等记录保存在当前浏览器，可在设置中导出和导入备份。更换设备或清理网站数据前请导出备份。
 
-网页存档保存在当前设备的浏览器中，不会自动上传或跨设备同步。换设备、清理浏览器数据前请导出备份。iPhone 用户可在 Safari 中添加到主屏幕。
+网站：https://izumisaitio.github.io/arydia/
 
-应用文本尚未全面校对，请按编号查找，并以实体卡牌和规则书为准。
-
-This is an unofficial fan-made companion for the physical game. Records are stored locally. Export a backup before changing devices or clearing browser data. Text is not fully proofread; consult the physical cards and rulebook.
-
-Arydia and the original game artwork, music and text belong to their respective rights holders. This project does not claim ownership of those materials.
+游戏素材的权利归原权利人所有。

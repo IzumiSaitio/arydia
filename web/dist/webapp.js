@@ -37,7 +37,7 @@
     if (page === 'settings') {
       const section = document.createElement('section'); section.className = 'panel web-settings';
       section.innerHTML = `<h2>网页版与离线</h2><p class="web-offline" data-web-offline role="status"></p><div class="web-actions">${!standalone() ? '<button class="btn primary" data-web-action="install">添加到主屏幕</button>' : ''}<button class="btn" data-web-action="help">使用说明</button><button class="btn" data-web-action="update" hidden>更新网页版</button></div>${musicControls()}<p class="muted">记录保存在当前设备，不会自动同步。清理网站数据或更换设备前，请导出备份。</p>`;
-      document.querySelector('#main .page-title')?.after(section);
+      document.querySelector('#main')?.append(section);
     } else if (page === 'music') {
       document.querySelector('.music-detail')?.insertAdjacentHTML('beforeend', musicControls());
       if (ios) {

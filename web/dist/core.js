@@ -34,14 +34,19 @@ function toggleMark(c,row,col){
  }else {const on=!s.marks[row][col];if(on){if(col>level)throw Error('需要达到'+col+'级才能提升此属性（当前'+level+'级）');const start=row<3?0:3,end=row<3?3:9;for(let i=start;i<end;i++)s.marks[i][col]=false;}s.marks[row][col]=on;}
  const max=cardDerived(c).max;c.current=c.current.map((v,i)=>Math.min(v,max[i]));return c;
 }
+function prerequisites(c,id){return (root.SKILL_EDGES[c.path]||[]).filter(e=>e[1]===Number(id)).map(e=>e[0]);}
 function toggleSkill(c,id,key){
  if(!path(c.path).skills.some(s=>s.id===id)||!['learned','mastered','equipped'].includes(key))throw Error('无效的技能位置');
- const s=c.skills[id]||(c.skills[id]={learned:false,mastered:false,equipped:false});
- if(key==='equipped'&&!s.equipped&&Object.values(c.skills).filter(v=>v.equipped).length>=5)throw Error('最多装备5个道途技能，请先取消一个装备勾选');
- s[key]=!s[key];if(key==='learned'&&!s.learned){s.mastered=false;s.equipped=false;}else if(s[key])s.learned=true;
- return c;
+ const s=c.skills[id]||{learned:false,mastered:false,equipped:false},on=!s[key];
+ if(key==='equipped'&&on&&Object.values(c.skills).filter(v=>v.equipped).length>=5)throw Error('最多装备5个道途技能，请先取消一个装备勾选');
+ const missing=prerequisites(c,id).filter(n=>!c.skills[n]?.learned);
+ if(on&&missing.length)throw Error('先决技能：'+missing.map(n=>path(c.path).prefix+'-'+n).join(', '));
+ const dependent=(root.SKILL_EDGES[c.path]||[]).filter(e=>e[0]===id&&c.skills[e[1]]?.learned).map(e=>e[1]);
+ if(key==='learned'&&!on&&dependent.length)throw Error('请先取消后续技能：'+dependent.map(n=>path(c.path).prefix+'-'+n).join(', '));
+ s[key]=on;if(key==='learned'&&!on){s.mastered=false;s.equipped=false;}else if(on)s.learned=true;
+ c.skills[id]=s;return c;
 }
-function canLearn(c,id){const s=path(c.path).skills.find(x=>x.id===Number(id));return s&&!c.skills[id]?.learned&&s.requires.every(x=>c.skills[x]?.learned);}
+function canLearn(c,id){const s=path(c.path).skills.find(x=>x.id===Number(id));return s&&!c.skills[id]?.learned&&prerequisites(c,id).every(x=>c.skills[x]?.learned);}
 function switchPath(c,next){
  if(!path(next))throw Error('请选择有效道途');if(c.path===next)return c;
  sheet(c);const old=path(c.path),records=c.pathRecords||(c.pathRecords={});
@@ -110,5 +115,5 @@ function validate(raw){
  if(raw.battle!==undefined){if(!root.LegacyRecords)throw Error('旧版存档读取组件未加载');s.battle=root.LegacyRecords.validate(raw.battle);}
  return s;
 }
-root.Core={clone,race,path,norm,resolve,display,defaults,create,derived,canLearn,levelUp,undoLevel,search,relationships,validate,sheet,cardDerived,toggleMark,toggleSkill,switchPath};
+root.Core={prerequisites,clone,race,path,norm,resolve,display,defaults,create,derived,canLearn,levelUp,undoLevel,search,relationships,validate,sheet,cardDerived,toggleMark,toggleSkill,switchPath};
 })(typeof window==='undefined'?globalThis:window);
